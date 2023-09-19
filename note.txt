@@ -1,0 +1,7 @@
+python -m venv venv : To create virtual environment
+.\venv\Scripts\Activate : To activate virtual environment
+pip freeze > requirements.txt : To create and update requirements.txt
+pip install -r requirements.txt : To install Dependencies
+python run.py : run command 
+
+
