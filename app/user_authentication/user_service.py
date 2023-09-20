@@ -1,12 +1,14 @@
 from flask import jsonify
-from .models import db, User
-from flask_jwt_extended import create_access_token,get_jwt_identity
+from .user_models import db, User
+from flask_jwt_extended import create_access_token,get_jwt_identity,jwt_required
+import bcrypt
 
 def register_user(data):
     if not data or 'username' not in data or 'password' not in data:
         return jsonify({'message': 'Invalid request'}), 400
 
     username = data['username']
+    userId = data['userId']
     password = data['password']
 
     # Check if the username already exists in the database
@@ -14,8 +16,11 @@ def register_user(data):
     if existing_user:
         return jsonify({'message': 'Username already exists'}), 400
 
-    # Create a new user and add it to the database
-    new_user = User(username=username, password=password)
+    # Hash the user's password
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+    # Create a new user and add it to the database with the hashed password
+    new_user = User(username=username, password=hashed_password.decode('utf-8'),userId=userId)
     db.session.add(new_user)
     db.session.commit()
 
@@ -28,9 +33,10 @@ def login_user(data):
     username = data['username']
     password = data['password']
 
-    # Check if the user exists in the database and the password is correct
+    # Check if the user exists in the database
     user = User.query.filter_by(username=username).first()
-    if user and user.password == password:
+    if user and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+        # The entered password matches the stored hashed password
         # Generate an access token for the user
         access_token = create_access_token(identity=username)
 
