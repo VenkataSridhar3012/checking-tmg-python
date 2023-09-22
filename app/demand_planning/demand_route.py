@@ -1,10 +1,12 @@
 from flask import Blueprint, request, jsonify
 from .overview import process_excel_file 
+from .customer_neutral import get_customer_neutral_data 
+from .customer_specfic import get_customer_specfic_data 
 
 # Create a blueprint for your routes
-overview_bp = Blueprint('overview', __name__)
+demandplanning_bp = Blueprint('demandplanning', __name__)
 
-@overview_bp.route('/overview', methods=['POST'])
+@demandplanning_bp.route('/overview', methods=['POST'])
 def overview():
     # Check if a file was sent with the request
     if 'file' not in request.files:
@@ -22,5 +24,20 @@ def overview():
 
     # Call the service function to process the file
     return process_excel_file(file)
+
+
+
+@demandplanning_bp.route('/customer_specfic_data', methods=['GET'])
+def customer_specfic_data():
+    
+    # Call the service function to process the file
+    return get_customer_specfic_data()
+
+
+@demandplanning_bp.route('/customer_neutral_data', methods=['GET'])
+def customer_neutral_data():
+    
+    # Call the service function to process the file
+    return get_customer_neutral_data()
 
 

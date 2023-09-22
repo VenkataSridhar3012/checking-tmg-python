@@ -16,17 +16,17 @@ from app.products.product_model import ProductDataModel
 def save_process_excel_file(file):
     try:
          # Check if a record for the current month and year already exists
-        # existing_record = Document.query.filter(
-        #     extract('month', Document.createdAt) == func.extract('month', func.now()),
-        #     extract('year', Document.createdAt) == func.extract('year', func.now())
-        # ).first()
+        existing_record = Document.query.filter(
+            extract('month', Document.createdAt) == func.extract('month', func.now()),
+            extract('year', Document.createdAt) == func.extract('year', func.now())
+        ).first()
 
-        # if existing_record:
-        # # A record for the current month already exists
-        # # You can raise an error or return a message as needed
-        #  print("A record for the current month already exists.")
-        #  response = "A record for the current month already exists."
-        #  return response, 400, {'Content-Type': 'application/json'}
+        if existing_record:
+        # A record for the current month already exists
+        # You can raise an error or return a message as needed
+         print("A record for the current month already exists.")
+         response = "A record for the current month already exists."
+         return response, 400, {'Content-Type': 'application/json'}
         
         current_datetime = datetime.now()
         # Create a new Document instance
