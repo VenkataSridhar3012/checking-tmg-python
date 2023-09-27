@@ -90,7 +90,7 @@ COPY . .
 # Set the environment variable to use the virtual environment
 ENV PATH="/app/venv/bin:$PATH"
 
-EXPOSE  3000
+EXPOSE  8081
 
 # Your application command (modify this as needed)
 CMD ["python", "run.py"]
