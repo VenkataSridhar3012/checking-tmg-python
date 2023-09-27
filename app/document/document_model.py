@@ -24,3 +24,29 @@ class Document(db.Model):
     workStationFileKey = db.Column(db.String(255), nullable=True)
     createdAt = Column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
     updatedAt = Column(DateTime, onupdate=datetime.now, server_default=text('CURRENT_TIMESTAMP'))
+    
+    
+    
+def document_to_json(document):
+    data = {
+        "id": str(document.id),
+        "startdate": document.startdate.isoformat() if document.startdate else None,
+        "enddate": document.enddate.isoformat() if document.enddate else None,
+        "demanddate": document.demanddate.isoformat() if document.demanddate else None,
+        "productData": document.productData,
+        "supplierCapacity": document.supplierCapacity,
+        "productionCapacity": document.productionCapacity,
+        "productionCapacityBacklog": document.productionCapacityBacklog,
+        "workStation": document.workStation,
+        "demandId": document.demandId,
+        "demandFileKey": document.demandFileKey,
+        "productId": document.productId,
+        "productReference": document.productReference,
+        "supplierCapacityFileKey": document.supplierCapacityFileKey,
+        "backlogFileKey": document.backlogFileKey,
+        "workStationFileKey": document.workStationFileKey,
+        "createdAt": document.createdAt.isoformat(),
+        "updatedAt": document.updatedAt.isoformat(),
+        # Add other attributes as needed
+    }
+    return data

@@ -26,7 +26,6 @@ def get_products_details():
         ).all()
 
         productdata_list = None
-
         if product_data:
             productdata_list = [
                 {
@@ -49,39 +48,48 @@ def get_products_details():
             return_msg = "No matching document found"
             return return_msg
 
-        return productdata_list, 200, {"Content-Type": "application/json"}
+        
+        target_key = 'productSegmaentNumber'
+        unique_values = set()
+        for d in productdata_list:
+         if target_key in d:
+        # Add the value to the set to ensure uniqueness
+            unique_values.add(d[target_key]) 
+        unique_values_list = list(unique_values)
+      
+        response={
+            'productSegmaentNumber':unique_values_list
+        }
+
+        return response, 200, {"Content-Type": "application/json"}
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
 
-def get_productsIds_details(ids):
+def get_productsIds_details(ids,column_name1,column_name2):
     try:
-        # Get the current month and year
-        current_month = datetime.now().month
-        current_year = datetime.now().year
-
-        # Calculate the start and end date for the current month
-        start_date = datetime(current_year, current_month, 1)
-        end_date = (
-            datetime(current_year, current_month + 1, 1)
-            if current_month < 12
-            else datetime(current_year + 1, 1, 1)
-        )
-
+       
         # Replace this with your array of IDs
-        ids_to_retrieve = ids
+        values_to_filter = ids
         # ids_to_retrieve = [1, 2, 3]  # Replace with your desired IDs
+        # Get the column dynamically using getattr
+        filter_dict = {}
+        column = getattr(ProductDataModel, column_name1)
 
+        filter_dict[column] = values_to_filter
+
+        # Now, you can use this filter_dict in your query
         product_data = ProductDataModel.query.filter(
             and_(
-                ProductDataModel.createdAt >= start_date,
-                ProductDataModel.createdAt < end_date,
-                ProductDataModel.id.in_(ids_to_retrieve)  # Filter by IDs
+                *[
+                    column.in_(values)  # Unpack values list for the column
+                    for column, values in filter_dict.items()
+                ]
             )
-        ).all()
-
+        ).all()     
+        
         productdata_list = None
 
         if product_data:
@@ -105,8 +113,22 @@ def get_productsIds_details(ids):
         else:
             return_msg = "No matching document found"
             return return_msg
+        
+        
+       
+        target_key = column_name2
+        unique_values = set()
+        for d in productdata_list:
+         if target_key in d:
+        # Add the value to the set to ensure uniqueness
+            unique_values.add(d[target_key])
+        unique_values_list = list(unique_values)
+      
+        response={
+           column_name2:unique_values_list
+        }
 
-        return productdata_list, 200, {"Content-Type": "application/json"}
+        return response, 200, {"Content-Type": "application/json"}
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

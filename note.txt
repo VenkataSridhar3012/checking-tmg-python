@@ -1,13 +1,9 @@
 python -m venv venv : To create virtual environment
 .\venv\Scripts\Activate : To activate virtual environment
-pip freeze > requirements.txt : To create and update requirements.txt
 pip install -r requirements.txt : To install Dependencies
+pip freeze > requirements.txt : To create and update requirements.txt
 python run.py : run command 
 
 
 
 
-id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True)
-from sqlalchemy import Column, String, PrimaryKeyConstraint
-from sqlalchemy.dialects.postgresql import UUID
-import uuid

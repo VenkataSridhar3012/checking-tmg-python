@@ -7,16 +7,23 @@ product_bp = Blueprint('product', __name__)
 
 @product_bp.route('/getProduct', methods=['GET'])
 def getProduts():
-   
     return get_products_details()
 
 
 @product_bp.route('/getProducts_with_ids', methods=['GET'])
-def getProduts_ids():
-    
-    data = request.get_json()  # Get JSON data from the request body
-    ids_to_retrieve = data.get('ids', [])  # Retrieve the 'ids' list from the JSON data
-    return get_productsIds_details(ids_to_retrieve)
+def getProductsWithIds():
+    # Get query parameters from the URL
+    from_param = request.args.get('from')
+    to_param = request.args.get('to')
+
+    # Get JSON data from the request body
+    data = request.get_json()
+
+    # Retrieve the 'ids' list from the JSON data
+    ids_to_retrieve = data.get('ids', [])
+
+    # Use 'from_param' and 'to_param' directly in your function if needed
+    return get_productsIds_details(ids_to_retrieve, from_param, to_param)
 
 
 

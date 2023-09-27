@@ -20,6 +20,21 @@ class DemandDataModel(db.Model):
     updatedAt = Column(DateTime, onupdate=datetime.now, server_default=text('CURRENT_TIMESTAMP'))
   
     
+def demand_data_model_to_json(demand_data):
+    data = {
+        "id": str(demand_data.id),
+        "customer_specific": demand_data.customer_specific,
+        "customer_neutral": demand_data.customer_neutral,
+        "demandFileKey": demand_data.demandFileKey,
+        "date": demand_data.date.isoformat() if demand_data.date else None,
+        "demandDataType": demand_data.demandDataType,
+        "userId": demand_data.userId,
+        "documentId": demand_data.documentId,
+        "createdAt": demand_data.createdAt.isoformat(),
+        "updatedAt": demand_data.updatedAt.isoformat(),
+        # Add other attributes as needed
+    }
+    return data
 
     
     

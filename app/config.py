@@ -1,3 +1,9 @@
+from datetime import timedelta
+
+class Config:
+    # Other app configurations here
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=1)
+
 # Configuration settings for Flask app
 SECRET_KEY = 'secret_t_m_g'  # Replace with a strong secret key
 SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:Sra%401901@localhost/test'  # Replace with your PostgreSQL database URL
