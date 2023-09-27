@@ -107,87 +107,10 @@ def save_process_excel_file(file):
         # print(data_array3)
         print(type(data_array3))
        
-        # creating overview
-        demand = pd.concat([demand_customer_specific, demand_customer_neutral])
-        demand['demand_type'] = demand['demand_type'].replace({value: key for key, value in dmd_names.items()})
-        demand['customer'].fillna('none', inplace=True)
-        demand.head()
-        
-        
-        # add product categories to demand
-
-        product_base_data = pd.read_excel(file, sheet_name='product_base_data')
-        product_base_data = product_base_data[['product_segment_no', 'product_no', 'material_no']]
-
-        # map by product
-        demand = demand.merge(product_base_data, on='product_no', how='left')
-        demand.head()
-        
-        product_segment_no = '009292V238-0800402-1'
-        product_no = '009292V238-0800402-1'
-        material_no = '009292V238-0800402-1'
-        
-        colours = {'dark_grey': '#404040', 'blue': '#636efa', 'green': '#00cc96', 'dark_blue': '#06038D', 'pink': '#ff007f', 'light_grey' :	'#D3D3D3', 'lighter_grey': '#F2F2F2'}
-        blues = sns.light_palette(colours['blue'], n_colors=6).as_hex()
-        blues.reverse()
-        greens = sns.light_palette(colours['green'], n_colors=6).as_hex()
-        greens.reverse()
-        
-        DP_overview = make_DP_overview(product_segment_no = product_segment_no, product_no = product_no, material_no = material_no
-        , demand = demand,dmd_names=dmd_names)
-        
-        
-        
-        print(DP_overview)
-        response = demand.head()
-        response = response.to_json(orient='records')
+        response='successfully uploaded data '
         return response, 200, {'Content-Type': 'application/json'}
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
     
-    
-    
-    
-# def customer_specfic(file):
-    try:
-        
-        
-       
-        
-            
-              
-              
-        
-        # add product categories to demand
-
-        product_base_data = pd.read_excel(file, sheet_name='product_base_data')
-        product_base_data = product_base_data[['product_segment_no', 'product_no', 'material_no']]
-
-        # map by product
-        demand = demand.merge(product_base_data, on='product_no', how='left')
-        demand.head()
-        
-        product_segment_no = '009292V238-0800402-1'
-        product_no = '009292V238-0800402-1'
-        material_no = '009292V238-0800402-1'
-        
-        colours = {'dark_grey': '#404040', 'blue': '#636efa', 'green': '#00cc96', 'dark_blue': '#06038D', 'pink': '#ff007f', 'light_grey' :	'#D3D3D3', 'lighter_grey': '#F2F2F2'}
-        blues = sns.light_palette(colours['blue'], n_colors=6).as_hex()
-        blues.reverse()
-        greens = sns.light_palette(colours['green'], n_colors=6).as_hex()
-        greens.reverse()
-        
-        DP_overview = make_DP_overview(product_segment_no = product_segment_no, product_no = product_no, material_no = material_no
-        , demand = demand,dmd_names=dmd_names)
-        
-        
-        
-        print(DP_overview)
-        response = demand.head()
-        response = response.to_json(orient='records')
-        return response, 200, {'Content-Type': 'application/json'}
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500

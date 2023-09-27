@@ -12,7 +12,7 @@ from app.products.product_model import ProductDataModel
 from plotly.io import to_json
 from sqlalchemy import and_
 
-def process_excel_file(file):
+def get_overivewData():
     try:
         # Get the current month and year
         current_month = datetime.now().month
@@ -33,11 +33,7 @@ def process_excel_file(file):
         productdata_list=None
     
         if demand_data and document and product_data:
-         #  print(demand_data.id)  # Access the id attribute
-         #  print('customer_specific',demand_data.customer_specific)
-          #  print("customer_neutral",demand_data.customer_neutral)  # Access the enddate attribute
-         #  print("customer_neutral",demand_data.demandDataType)  # Access the enddate attribute
-     
+         
           productdata_list =[{'id': item.id,
               'productNumber': item.productNumber,
               'productName': item.productName,

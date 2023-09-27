@@ -5,25 +5,27 @@ from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime
         
         
-class UserConfig(db.Model):
+class Scenario(db.Model):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True)
-    planningDuration = db.Column(db.String(80))
-    moduleNameAccess = moduleNameAccess = db.Column(Boolean,default=True)
+    scenarioName = db.Column(db.String(80))
+    scenarionDescription = db.Column(db.String(80))
+    isPublish  = db.Column(Boolean,default=True)
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.id'))
-    user = db.relationship('User', backref='configurations')
+    user = db.relationship('User', backref='user')
     createdAt = Column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
     updatedAt = Column(DateTime, onupdate=datetime.now, server_default=text('CURRENT_TIMESTAMP'))
     
     
     
-def user_config_to_json(user_config):
+def scenario_to_json(scenario):
     data = {
-        "id": str(user_config.id),
-        "planningDuration": user_config.planningDuration,
-        "moduleNameAccess": user_config.moduleNameAccess,
-        "user_id": str(user_config.user_id),
-        "createdAt": user_config.createdAt.isoformat(),
-        "updatedAt": user_config.updatedAt.isoformat(),
+        "id": str(scenario.id),
+        "scenarioName": scenario.scenarioName,
+        "scenarioDescription": scenario.scenarionDescription,
+        "isPublish": scenario.isPublish,
+        "user_id": str(scenario.user_id),
+        "createdAt": scenario.createdAt.isoformat(),
+        "updatedAt": scenario.updatedAt.isoformat(),
         # Add other attributes as needed
     }
     return data
