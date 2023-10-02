@@ -1,0 +1,58 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg
+*.egg-info
+dist/
+build/
+*.egg-info/
+*.dist-info/
+
+# C extensions
+*.c
+*.cpp
+*.so
+
+# Directories typically containing logs, databases, etc.
+*.log
+*.db
+*.sqlite3
+
+# Virtual environment
+venv/
+*.venv/
+.env
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.mypy_cache/
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.gcda
+*.gcno
+*.gcov
+
+# IDE / Editor directories
+.idea/
+.vscode/
+
+# OS generated
+.DS_Store
+*.swp
+*.swo
+*~
+
+#from code
+Dockerfile
+readme.md
+README.md
+
+
+
