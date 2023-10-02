@@ -82,7 +82,7 @@ def get_customer_specfic_data():
       'demand_DataType': demand_DataType,
       'productdata_list': productdata_list
       }
-    
+    print(demand.head())
     graph_data=make_DP_customer_specific(customer,product_segment_no,product_no,material_no,demand_DataType,demand)
     
     graph_data = to_json(graph_data)

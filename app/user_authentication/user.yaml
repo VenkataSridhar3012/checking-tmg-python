@@ -1,0 +1,54 @@
+openapi: "3.0.2"
+info:
+  version: "1.0"
+  title: "Your API Documentation"
+  description: "API documentation for your Flask application"
+tags:
+  - name: "User"
+    description: "Operations about user login"
+
+paths:
+  /user/register:
+    post:
+      tags:
+        - "User"
+      summary: "Register a new user"
+      description: "Endpoint to register a new user."
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The email of the user.
+                password:
+                  type: string
+                  description: The password of the user.
+      responses:
+        '200':
+          description: User registered successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message.
+        '400':
+          description: Invalid request or user already exists.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.

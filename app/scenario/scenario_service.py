@@ -1,5 +1,7 @@
 from flask import jsonify
 from .scenario_model import db,Scenario
+from ..action_points.ap_model import db,ActionPoint
+from sqlalchemy.orm.exc import NoResultFound
 
 def sv_createScenario(data):
     try:
@@ -54,11 +56,65 @@ def sv_deleteScenario(id):
         Scenario = Scenario.query.get(id)
         if Scenario is None:
             return jsonify({'error': 'Scenario not found'}), 404
-
+        # deleteing action points
+        db.query(ActionPoint).filter(ActionPoint.scenarioId == id).delete()
+        db.commit()
+        
         db.session.delete(Scenario)
         db.session.commit()
 
         return jsonify({'message': 'Scenario deleted successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    
+def get_scenario(id):
+    try:
+        scenario = Scenario.query.get(id)
+        if scenario is None:
+            return jsonify({'error': 'Scenario not found'}), 404
+
+        response_data = {
+                "id": str(scenario.id),
+                "scenarioName": scenario.scenarioName,
+                "scenarioDescription": scenario.scenarionDescription,
+                "isPublish": scenario.isPublish,
+                "user_id": str(scenario.user_id),
+                "createdAt": scenario.createdAt.isoformat(),
+                "updatedAt": scenario.updatedAt.isoformat(),
+            }
+
+        return jsonify(response_data), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+   
+   
+    
+def get_scenarios(id):
+    try:
+        # Query scenarios based on the provided ID
+        scenarios = Scenario.query.filter(Scenario.user_id == id).all()
+
+        response_data = []
+
+        for scenario in scenarios:
+            scenario_data = {
+                "id": str(scenario.id),
+                "scenarioName": scenario.scenarioName,
+                "scenarioDescription": scenario.scenarionDescription,
+                "isPublish": scenario.isPublish,
+                "user_id": str(scenario.user_id),
+                "createdAt": scenario.createdAt.isoformat(),
+                "updatedAt": scenario.updatedAt.isoformat(),
+            }
+            response_data.append(scenario_data)
+
+        return jsonify(response_data), 200
+
+    except NoResultFound:
+        return jsonify({'error': 'Scenario not found'}), 404
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

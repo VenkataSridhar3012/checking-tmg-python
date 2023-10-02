@@ -1,10 +1,12 @@
 import json
+import re
 from flask import Flask, request, jsonify
 import pandas as pd
 from datetime import datetime
 from sqlalchemy import func,extract
 import os
 import seaborn as sns 
+import pandas as pd
 from app.demand_planning.utill import melt_cols, make_DP_overview
 from app import db  # Import your SQLAlchemy instance
 from app.demand_planning.demand_model import DemandDataModel
@@ -114,3 +116,57 @@ def save_process_excel_file(file):
         return jsonify({'error': str(e)}), 500
     
     
+def identify_files_data(file_paths):
+    identified_data = {}
+
+    for file_path in file_paths:
+        # Read the file into a DataFrame
+        if file_path.endswith(".csv"):
+            df = pd.read_csv(file_path)
+        elif file_path.endswith((".xls", ".xlsx")):
+            df = pd.read_excel(file_path)
+        else:
+            # Handle unsupported file types
+            identified_data[file_path] = "unsupported_file_type"
+            continue
+
+        # Get the column names
+        col_names = set(df.columns)
+
+        # Define a regular expression pattern to match QTYITEMUNIT followed by a number
+        qtyitemunit_pattern = re.compile(r'^QTYITEMUNIT(\d+)_$')
+
+        # Check if the columns match any predefined patterns
+        if "ITEMID" in col_names and any(qtyitemunit_pattern.match(col) for col in col_names):
+            save_as = "customer_neutral_demand_forecast_fileData"
+            
+        elif col_names == {"ITEMID", "Menge", "Liefermonat"}:
+            save_as = "customer_neutral_demand_orders_fileData"
+        elif col_names == {"ITEMID", "CUSTACCOUNT", "DEFAULTAGREEMENTLINEEXPIRATIONDATE", "COMMITEDQUANTITY"}:
+            save_as = "customer_specific_demand_project_fileData"
+        elif col_names == {"ITEMID", "Menge", "CUSTACCOUNT", "Liefermonat"}:
+            save_as = "customer_specific_demand_orders_fileData"
+        elif col_names == {"ITEMID", "SALESPRICE", "LINEAMOUNT", "PACKAGEQTYRST", "PACKINGQTYRST"}:
+            save_as = "pricing_fileData"
+        elif col_names == {"ITEMID", "CUSTACCOUNT", "Backlog"}:
+            save_as = "DP_backlog"
+        elif col_names == {"ITEMID", "CUSTACCOUNT", "MONATID", "Menge"}:
+            save_as = "demand_previous_year"
+        else:
+            save_as = "unknown_category"
+
+        # Store the identified data in the variable
+        identified_data[file_path] = save_as
+
+    return identified_data
+
+# {
+#     "temp/01a_Forecast_without_Customers.xlsx": "customer_neutral_demand_forecast_fileData",
+#     "temp/04_Daten_StdPreis_Berechnung.xlsx": "pricing_fileData",
+#     "temp/05_DP_Product_Backlog.xlsx": "DP_backlog",
+#     "temp/Kundendedizierter_Bedarf_Kaufverträge_neu.xlsx": "customer_specific_demand_project_fileData",
+#     "temp/Open_Orders_neu.xlsx": "customer_specific_demand_orders_fileData",
+#     "temp/Open_Orders_ohne_Kunden_neu.xlsx": "customer_neutral_demand_orders_fileData",
+#     "temp/demand_prev_Year_mit Kunden_neu.xlsx": "demand_previous_year"
+# }
+

@@ -1,7 +1,7 @@
 from flask import jsonify
 from .user_models import db, User
 from app.user_config.user_config_model import UserConfig , user_config_to_json
-from flask_jwt_extended import create_access_token,get_jwt_identity
+from flask_jwt_extended import create_access_token, get_jwt_identity
 import bcrypt
 from datetime import timedelta
 
@@ -45,9 +45,9 @@ def login_user(data):
     if user and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
         # The entered password matches the stored hashed password
         # Create a custom dictionary of data to include in the token
-        custom_claims = {'userid': user.id,'email':user.email}
+        
         # Generate an access token for the user
-        access_token = create_access_token(identity=email,additional_claims=custom_claims)
+        access_token = create_access_token(identity={'userid': user.id, 'email': user.email})
         # find user config details
         user_config = UserConfig.query.filter_by(user_id=user.id).first()
         user_config_json = user_config_to_json(user_config)
@@ -58,17 +58,20 @@ def login_user(data):
        
 def get_user_profile():
     # Get the current user's identity from the JWT token
-    current_user = get_jwt_identity()
-
+    current_user =get_jwt_identity()
+    # Access the claims directly from the identity
+    userid = current_user.get('jwt', {}).get('userid')
+    email = current_user.get('jwt', {}).get('email')
+    
+    print(userid,email)
     # Fetch user data from your database based on the username
-    user = User.query.filter_by(username=current_user).first()
+    user = User.query.filter_by(email=current_user['email']).first()
 
     if not user:
         return jsonify({'message': 'User not found'}), 404
 
     # Serialize the user data as needed
     user_data = {
-        'username': user.username,
         'email': user.email,
         # Add more user attributes as needed
     }

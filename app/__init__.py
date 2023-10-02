@@ -1,27 +1,35 @@
-from flask import Flask, jsonify, send_file
+import os
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
-from flask_restful_swagger_2 import Api as SwaggerApi
+from flasgger import Swagger
+import yaml
 
 # Initialize the Flask app
 app = Flask(__name__)
 
-
-
-# Initialize Swagger with host information
-swagger = SwaggerApi(app, api_version='1.0', title='Your API Title', description='Your API Description', host='127.0.0.1:8081')
-
-print(swagger)
-
-
-# Load configuration from config.py
-app.config.from_pyfile('config.py')
+# Load configuration based on environment
+app_config = os.environ.get('APP_ENV', 'dev')  # Default to dev if not set
+with open(f'config/config_{app_config}.yaml', 'r') as file:
+    config_data = yaml.safe_load(file)
+    app.config.update(config_data)
 
 # Initialize the JWTManager with your Flask app
 jwt = JWTManager(app)
 
 # Initialize the database
 db = SQLAlchemy(app)
+
+# Ensure the 'temp' directory exists
+os.makedirs('temp', exist_ok=True)
+
+# Load Swagger configurations
+app.config['SWAGGER'] = {
+    'title': 'Your API',
+    'uiversion': 3,
+    'openapi': '3.0.2',
+}
+swagger = Swagger(app)
 
 
 # Import and register your routes and blueprints here
