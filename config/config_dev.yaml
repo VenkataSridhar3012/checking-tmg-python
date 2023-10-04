@@ -6,7 +6,7 @@ Config:
 
 SECRET_KEY: secret_t_m_g  # Replace with a strong secret key
 
-SQLALCHEMY_DATABASE_URI: postgresql://postgres:spotdev@89.246.174.249:5432/postgress  # Replace with your PostgreSQL database URL
+SQLALCHEMY_DATABASE_URI: postgresql://postgres:spotdev@89.246.174.249:5432/postgres  # Replace with your PostgreSQL database URL
 
 SQLALCHEMY_TRACK_MODIFICATIONS: false  # Disable tracking modifications for SQLAlchemy
 
