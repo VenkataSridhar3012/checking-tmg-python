@@ -10,7 +10,7 @@ SQLALCHEMY_DATABASE_URI: postgresql://postgres:Sra%401901@localhost/test  # Repl
 
 SQLALCHEMY_TRACK_MODIFICATIONS: false  # Disable tracking modifications for SQLAlchemy
 
-base_url: 'http://127.0.0.1'
+BASE_URL: 'http://dev.tmg-consultants.de'
 
 port: 8081
 
