@@ -146,10 +146,10 @@ COPY --from=build-env /app /app
 
 
 
-# Create a config directory and copy the secret YAML into it
-ARG YAML_PATH
-RUN mkdir -p /app/config
-COPY $YAML_PATH /app/config/config_dev.yaml
+# # Create a config directory and copy the secret YAML into it
+# ARG YAML_PATH
+# RUN mkdir -p /app/config
+# COPY $YAML_PATH /app/config/config_dev.yaml
 
 # Expose the port the app runs on
 EXPOSE 8081
