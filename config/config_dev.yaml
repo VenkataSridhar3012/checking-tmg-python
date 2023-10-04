@@ -10,7 +10,7 @@ SQLALCHEMY_DATABASE_URI: postgresql://postgres:spotdev@89.246.174.249:5432/postg
 
 SQLALCHEMY_TRACK_MODIFICATIONS: false  # Disable tracking modifications for SQLAlchemy
 
-BASE_URL: 'http://dev.tmg-consultants.de'
+BASE_URL: '0.0.0.0'
 
 port: 8081
 

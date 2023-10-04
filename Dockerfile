@@ -114,7 +114,7 @@
 # EXPOSE 8081
 
 # # Define environment variable
-# ENV APP_ENV prod
+# ENV APP_ENV dev
 
 # # Run main.py when the container launches
 # CMD ["python", "run.py"]
