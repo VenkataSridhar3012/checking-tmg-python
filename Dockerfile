@@ -57,7 +57,7 @@
 # # Your application command (modify this as needed)
 # CMD ["python", "run.py"]
 
-##latest
+# #latest
 # # Stage 1: Build the virtual environment
 # FROM python:3.9-slim-bullseye AS builder
 
@@ -89,7 +89,7 @@
 
 # # Set the environment variable to use the virtual environment
 # ENV PATH="/app/venv/bin:$PATH"
-# ENV APP_ENV=dev
+# ENV APP_ENV dev
 
 # EXPOSE  8081
 
