@@ -152,7 +152,7 @@ COPY --from=build-env /app /app
 # COPY $YAML_PATH /app/config/config_dev.yaml
 
 # Expose the port the app runs on
-EXPOSE 8081
+EXPOSE 3001
 
 
 # Set the environment variable
