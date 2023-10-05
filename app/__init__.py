@@ -43,10 +43,10 @@ from app.action_points.ap_route import actionPoint_bp  # Import your user_routes
 
 # Register the routes and blueprints with the app
 app.register_blueprint(main_bp)
-app.register_blueprint(user_bp, url_prefix='/user')
-app.register_blueprint(demandplanning_bp, url_prefix='/demand')
-app.register_blueprint(document_bp, url_prefix='/document')
-app.register_blueprint(product_bp, url_prefix='/product')
-app.register_blueprint(scenario_bp, url_prefix='/scenario')
-app.register_blueprint(actionPoint_bp, url_prefix='/actionPoint')
+app.register_blueprint(user_bp, url_prefix='/api/user')
+app.register_blueprint(demandplanning_bp, url_prefix='/api/demand')
+app.register_blueprint(document_bp, url_prefix='/api/document')
+app.register_blueprint(product_bp, url_prefix='/api/product')
+app.register_blueprint(scenario_bp, url_prefix='/api/scenario')
+app.register_blueprint(actionPoint_bp, url_prefix='/api/actionPoint')
 
