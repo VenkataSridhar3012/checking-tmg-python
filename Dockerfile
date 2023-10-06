@@ -180,7 +180,9 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Now, copy the rest of the app
 COPY . .
-
+RUN mkdir -p /app/config 
+ARG YAML_PATH
+COPY $YAML_PATH /app/config/config_dev.yaml
 
 
 # Runtime Stage
@@ -191,12 +193,6 @@ WORKDIR /app
 # Copy only the compiled dependencies and the app code from the build stage
 COPY --from=build-env /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
 COPY --from=build-env /app /app
-
-# Create a config directory and copy the secret YAML into it
-RUN mkdir -p /app/config 
-ARG YAML_PATH
-COPY $YAML_PATH /app/config/config_dev.yaml
-
 
 
 # Expose the port the app runs on
