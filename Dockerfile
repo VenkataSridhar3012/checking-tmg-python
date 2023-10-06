@@ -182,9 +182,6 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 COPY . .
 
 
-RUN mkdir -p /app/config 
-ARG YAML_PATH
-COPY $YAML_PATH /app/config/config_dev.yaml
 
 # Runtime Stage
 FROM python:3.9-slim-buster AS runtime-env
@@ -196,6 +193,10 @@ COPY --from=build-env /usr/local/lib/python3.9/site-packages /usr/local/lib/pyth
 COPY --from=build-env /app /app
 
 # Create a config directory and copy the secret YAML into it
+RUN mkdir -p /app/config 
+ARG YAML_PATH
+COPY $YAML_PATH /app/config/config_dev.yaml
+
 
 
 # Expose the port the app runs on
