@@ -182,8 +182,7 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 COPY . .
 
 
-RUN mkdir -p /app/config && \
-    touch /app/config/config_dev.yaml
+RUN mkdir -p /app/config 
 ARG YAML_PATH
 COPY $YAML_PATH /app/config/config_dev.yaml
 
