@@ -7,3 +7,30 @@ python run.py : run command
 
 
 
+#!/bin/bash
+
+# Check if the container exists (either running or stopped)
+if [ $(docker ps -aq -f name=check-python) ] || [ $(docker images -q dummy) ]; then
+    # If the container exists
+    if [ $(docker ps -aq -f name=check-python) ]; then
+        # Stop the container if it's running
+        docker stop check-python
+
+        # Remove the container
+        docker rm check-python
+    fi
+
+    # If the image exists
+    if [ $(docker images -q tmg-python) ]; then
+        # Remove the image
+        docker rmi dummy
+    fi
+fi
+
+# Build the Docker image
+docker build -t dummy .
+
+# Run a new container from the image
+docker run --name check-python -p 8081:3001 -d dummy
+
+
