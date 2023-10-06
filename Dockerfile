@@ -120,6 +120,48 @@
 # CMD ["python", "run.py"]
 
 
+# # Build Stage
+# FROM python:3.9-slim-buster AS build-env
+
+# WORKDIR /app
+
+# # Ensure system is updated and install build dependencies
+# RUN apt-get update && \
+#     apt-get install -y --no-install-recommends build-essential gcc && \
+#     rm -rf /var/lib/apt/lists/*
+
+# COPY . /app
+
+# # Install Python dependencies
+# RUN pip install --trusted-host pypi.python.org -r requirements.txt
+
+# # Runtime Stage
+# FROM python:3.9-slim-buster AS runtime-env
+
+# WORKDIR /app
+
+# # Copy only the compiled dependencies and the app code from the build stage
+# COPY --from=build-env /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
+# COPY --from=build-env /app /app
+
+# # Expose the port the app runs on
+# EXPOSE 3001
+
+
+# # Set the environment variable
+# ENV APP_ENV dev
+
+# # Command to run the application
+# CMD ["python", "run.py"]
+
+
+
+# # Create a config directory and copy the secret YAML into it
+# ARG YAML_PATH
+# RUN mkdir -p /app/config
+# COPY $YAML_PATH /app/config/config_dev.yaml
+
+
 # Build Stage
 FROM python:3.9-slim-buster AS build-env
 
@@ -130,10 +172,14 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends build-essential gcc && \
     rm -rf /var/lib/apt/lists/*
 
-COPY . /app
+# Copy only the requirements first
+COPY requirements.txt ./
 
 # Install Python dependencies
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
+
+# Now, copy the rest of the app
+COPY . .
 
 # Runtime Stage
 FROM python:3.9-slim-buster AS runtime-env
@@ -144,16 +190,8 @@ WORKDIR /app
 COPY --from=build-env /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
 COPY --from=build-env /app /app
 
-
-
-# # Create a config directory and copy the secret YAML into it
-# ARG YAML_PATH
-# RUN mkdir -p /app/config
-# COPY $YAML_PATH /app/config/config_dev.yaml
-
 # Expose the port the app runs on
 EXPOSE 3001
-
 
 # Set the environment variable
 ENV APP_ENV dev
