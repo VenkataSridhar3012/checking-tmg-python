@@ -184,6 +184,9 @@ RUN mkdir -p /app/config
 ARG MY_CONFIG
 COPY $MY_CONFIG /app/config/config_dev.yaml
 
+RUN if [ -d "/app/config" ]; then echo "config directory exists"; else echo "config directory NOT found"; exit 1; fi
+
+
 
 # Runtime Stage
 FROM python:3.9-slim-buster AS runtime-env
