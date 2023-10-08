@@ -180,13 +180,6 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Now, copy the rest of the app
 COPY . .
-RUN mkdir -p /app/config 
-ARG MY_CONFIG
-COPY $MY_CONFIG /app/config/config_dev.yaml
-
-RUN if [ -d "/app/config" ]; then echo "config directory exists"; else echo "config directory NOT found"; exit 1; fi
-
-
 
 # Runtime Stage
 FROM python:3.9-slim-buster AS runtime-env
@@ -196,6 +189,12 @@ WORKDIR /app
 # Copy only the compiled dependencies and the app code from the build stage
 COPY --from=build-env /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
 COPY --from=build-env /app /app
+
+RUN mkdir -p /app/config 
+ARG MY_CONFIG
+COPY $MY_CONFIG /app/config/config_dev.yaml
+
+RUN if [ -d "/app/config" ]; then echo "config directory exists"; else echo "config directory NOT found"; exit 1; fi
 
 
 # Expose the port the app runs on
