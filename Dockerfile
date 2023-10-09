@@ -191,10 +191,10 @@ COPY --from=build-env /usr/local/lib/python3.9/site-packages /usr/local/lib/pyth
 COPY --from=build-env /app /app
 
 RUN mkdir -p /app/config 
+RUN if [ -d "/app/config" ]; then echo "config directory exists"; else echo "config directory NOT found"; exit 1; fi
 ARG MY_CONFIG
 COPY $MY_CONFIG /app/config/config_dev.yaml
 
-RUN if [ -d "/app/config" ]; then echo "config directory exists"; else echo "config directory NOT found"; exit 1; fi
 
 
 # Expose the port the app runs on
